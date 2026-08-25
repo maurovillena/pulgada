@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora de Pulgadas Madereras</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="app-header">
+        <h1>Cubicación de Madera</h1>
+    </header>
+
+    <main class="app-container">
+        <!-- Formulario de ingreso -->
+        <section class="card form-card">
+            <h2>Agregar Piezas</h2>
+            
+            <div class="input-group">
+                <label>Tipo / Madera</label>
+                <select id="woodType">
+                    <option value="3200">Pino (Divisor 3.200)</option>
+                    <option value="3650">Nativa (Divisor 3.650)</option>
+                </select>
+            </div>
+
+            <div class="row-inputs">
+                <div class="input-group">
+                    <label>Espesor (")</label>
+                    <input type="number" id="thickness" step="0.5" placeholder="Ej: 2" value="1">
+                </div>
+                <div class="input-group">
+                    <label>Ancho (")</label>
+                    <input type="number" id="width" step="0.5" placeholder="Ej: 4" value="4">
+                </div>
+            </div>
+
+            <div class="row-inputs">
+                <div class="input-group">
+                    <label>Largo (cm)</label>
+                    <input type="number" id="length" placeholder="Ej: 320" value="320">
+                </div>
+                <div class="input-group">
+                    <label>Cantidad (palos)</label>
+                    <input type="number" id="quantity" placeholder="Ej: 10" value="1">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Precio por Pulgada Maderera ($ CLP)</label>
+                <input type="number" id="pricePerInch" placeholder="Ej: 1500" value="0">
+            </div>
+
+            <button id="addRowBtn" class="btn-primary">Agregar a la Tabla</button>
+        </section>
+
+        <!-- Tabla de resultados -->
+        <section class="card table-card">
+            <h2>Detalle de Compra</h2>
+            <div class="table-responsive">
+                <table id="lumberTable">
+                    <thead>
+                        <tr>
+                            <th>Cant. / Medidas</th>
+                            <th>Pulg. Madereras</th>
+                            <th>Total ($)</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas se agregarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="totals-section">
+                <p>Total Pulgadas: <span id="totalInches">0.00</span> <span>pulg²</span></p>
+                <p class="grand-total">Costo Total: $<span id="grandTotalPrice">0</span> CLP</p>
+            </div>
+            <button id="clearTableBtn" class="btn-secondary">Vaciar Lista</button>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
