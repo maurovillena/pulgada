@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const supplierSelect = document.getElementById('supplierSelect');
     const woodTypeSelect = document.getElementById('woodType');
     const pricePerInchInput = document.getElementById('pricePerInch');
+    
+    const catalogWoodGroup = document.getElementById('catalogWoodGroup');
+    const manualInputsGroup = document.getElementById('manualInputsGroup');
+    const manualDivisorSelect = document.getElementById('manualDivisor');
 
     const totalInchesEl = document.getElementById('totalInches');
     const grandTotalPriceEl = document.getElementById('grandTotalPrice');
@@ -14,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const suppliersData = {
         "tranapuente": {
             name: "Maderas Tranapuente",
-            divisor: 3650, // Divisor estándar para maderas nativas y finas
+            divisor: 3650,
             woods: [
                 { name: "Lenga Com. (Cepillado 2C)", price: 14280 },
                 { name: "Lenga Custom (Cepillado 2C)", price: 16660 },
@@ -39,11 +43,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Gestionar visualización según el proveedor seleccionado
+    function handleSupplierChange() {
+        const selectedSupplierKey = supplierSelect.value;
+
+        if (selectedSupplierKey === 'manual') {
+            catalogWoodGroup.style.display = 'none';
+            manualInputsGroup.style.display = 'block';
+            pricePerInchInput.value = ''; // Limpiar para que el usuario escriba libremente
+            pricePerInchInput.removeAttribute('readonly');
+        } else {
+            catalogWoodGroup.style.display = 'block';
+            manualInputsGroup.style.display = 'none';
+            updateWoods();
+        }
+    }
+
     // Rellenar selector de maderas al cambiar de proveedor
     function updateWoods() {
         const selectedSupplierKey = supplierSelect.value;
+        if (selectedSupplierKey === 'manual') return;
+
         const supplier = suppliersData[selectedSupplierKey];
-        
         woodTypeSelect.innerHTML = '';
         
         supplier.woods.forEach(wood => {
@@ -57,25 +78,37 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePriceField();
     }
 
-    // Actualizar campo de precio automáticamente según la madera seleccionada
+    // Actualizar campo de precio automáticamente según la madera seleccionada del catálogo
     function updatePriceField() {
+        if (supplierSelect.value === 'manual') return;
         const selectedOption = woodTypeSelect.options[woodTypeSelect.selectedIndex];
         if (selectedOption) {
             pricePerInchInput.value = selectedOption.value;
         }
     }
 
-    supplierSelect.addEventListener('change', updateWoods);
+    supplierSelect.addEventListener('change', handleSupplierChange);
     woodTypeSelect.addEventListener('change', updatePriceField);
 
     // Inicializar al cargar la página
-    updateWoods();
+    handleSupplierChange();
 
     let items = [];
 
     addRowBtn.addEventListener('click', () => {
-        const selectedOption = woodTypeSelect.options[woodTypeSelect.selectedIndex];
-        const divisor = parseFloat(selectedOption.dataset.divisor);
+        const supplierKey = supplierSelect.value;
+        let divisor = 3200;
+        let descriptionWood = "";
+
+        if (supplierKey === 'manual') {
+            divisor = parseFloat(manualDivisorSelect.value);
+            descriptionWood = "Manual";
+        } else {
+            const selectedOption = woodTypeSelect.options[woodTypeSelect.selectedIndex];
+            divisor = parseFloat(selectedOption.dataset.divisor);
+            // Extraer solo el nombre de la madera para la tabla (sin el precio)
+            descriptionWood = selectedOption.textContent.split(" - $")[0];
+        }
         
         const thickness = parseFloat(document.getElementById('thickness').value);
         const width = parseFloat(document.getElementById('width').value);
@@ -94,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const newItem = {
             id: Date.now(),
-            description: `${quantity}u [${thickness}"x${width}"] x ${length}cm`,
+            description: `${quantity}u [${thickness}"x${width}"] x ${length}cm (${descriptionWood})`,
             inches: totalInches,
             price: totalPrice
         };

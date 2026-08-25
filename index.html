@@ -18,11 +18,31 @@
             <h2>Agregar Piezas</h2>
             
             <div class="input-group">
+                <label>Proveedor</label>
+                <select id="supplierSelect">
+                    <option value="tranapuente">Maderas Tranapuente</option>
+                    <option value="general">Genérico / Otra Barraca</option>
+                    <option value="manual">Manual (Personalizado)</option>
+                </select>
+            </div>
+
+            <!-- Contenedor para Proveedores con catálogo -->
+            <div class="input-group" id="catalogWoodGroup">
                 <label>Tipo / Madera</label>
                 <select id="woodType">
-                    <option value="3200">Pino (Divisor 3.200)</option>
-                    <option value="3650">Nativa (Divisor 3.650)</option>
+                    <!-- Se llena dinámicamente desde app.js -->
                 </select>
+            </div>
+
+            <!-- Contenedor exclusivo para modo Manual -->
+            <div id="manualInputsGroup" style="display: none;">
+                <div class="input-group">
+                    <label>Divisor de Cubicación</label>
+                    <select id="manualDivisor">
+                        <option value="3200">Pino / Estándar (3.200)</option>
+                        <option value="3650">Nativa / Fina (3.650)</option>
+                    </select>
+                </div>
             </div>
 
             <div class="row-inputs">
@@ -75,7 +95,7 @@
             </div>
 
             <div class="totals-section">
-                <p>Total Pulgadas: <span id="totalInches">0.00</span> <span>pulg²</span></p>
+                <p>Total Pulgadas: <span id="totalInches">0.00</span></p>
                 <p class="grand-total">Costo Total: $<span id="grandTotalPrice">0</span> CLP</p>
             </div>
             <button id="clearTableBtn" class="btn-secondary">Vaciar Lista</button>
